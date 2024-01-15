@@ -7,7 +7,7 @@ builder.Services.AddControllers();
 var connStr = builder.Configuration.GetConnectionString("DefaultConnection");
 builder.Services.AddSqlConnection(connStr);
 
-builder.Services.AddControllers();
+builder.Services.AddRepositories();
 builder.Services.AddServices();
 
 var app = builder.Build();
