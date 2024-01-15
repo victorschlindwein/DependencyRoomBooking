@@ -1,19 +1,14 @@
-using DependencyRoomBooking.Repositories;
-using DependencyRoomBooking.Repositories.Contracts;
-using DependencyRoomBooking.Services;
-using DependencyRoomBooking.Services.Contracts;
-using Microsoft.Data.SqlClient;
+using DependencyRoomBooking.Extensions;
 
 var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddControllers();
 
-builder.Services.AddScoped<SqlConnection>(x => new SqlConnection());
+var connStr = builder.Configuration.GetConnectionString("DefaultConnection");
+builder.Services.AddSqlConnection(connStr);
 
-builder.Services.AddScoped<ICustomerRepository, CustomerRepository>();
-builder.Services.AddScoped<IRoomRepository, RoomRepository>();
-builder.Services.AddScoped<IBookRepository, BookRepository>();
-builder.Services.AddScoped<IPaymentService, PaymentService>();
+builder.Services.AddControllers();
+builder.Services.AddServices();
 
 var app = builder.Build();
 
