@@ -1,4 +1,4 @@
-﻿using DependencyRoomBooking.Models;
+﻿using DependencyRoomBooking.Commands;
 using DependencyRoomBooking.Services.Contracts;
 using Microsoft.AspNetCore.Mvc;
 

@@ -1,4 +1,6 @@
-﻿namespace DependencyRoomBooking.Models
+﻿using DependencyRoomBooking.Models;
+
+namespace DependencyRoomBooking.Commands
 {
     public class BookRoomCommand
     {
