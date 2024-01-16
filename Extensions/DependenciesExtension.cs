@@ -1,8 +1,8 @@
-﻿using DependencyRoomBooking.Repositories.Contracts;
-using DependencyRoomBooking.Repositories;
-using Microsoft.Data.SqlClient;
-using DependencyRoomBooking.Services.Contracts;
+﻿using DependencyRoomBooking.Repositories;
+using DependencyRoomBooking.Repositories.Contracts;
 using DependencyRoomBooking.Services;
+using DependencyRoomBooking.Services.Contracts;
+using Microsoft.Data.SqlClient;
 
 namespace DependencyRoomBooking.Extensions
 {

@@ -20,7 +20,7 @@ namespace DependencyRoomBooking.Services
 
             if (book == null)
                 return false;
-                
+
             return true;
         }
 

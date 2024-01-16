@@ -1,8 +1,6 @@
-﻿using Dapper;
-using DependencyRoomBooking.Models;
+﻿using DependencyRoomBooking.Models;
 using DependencyRoomBooking.Repositories.Contracts;
 using DependencyRoomBooking.Services.Contracts;
-using Microsoft.Data.SqlClient;
 
 namespace DependencyRoomBooking.Services
 {
