@@ -1,5 +1,4 @@
-﻿using System.Runtime.CompilerServices;
-using Dapper;
+﻿using Dapper;
 using DependencyRoomBooking.Models;
 using DependencyRoomBooking.Repositories.Contracts;
 using Microsoft.Data.SqlClient;
@@ -8,11 +7,16 @@ namespace DependencyRoomBooking.Repositories
 {
     public class RoomRepository : IRoomRepository
     {
+        private readonly SqlConnection _connection;
+
+        public RoomRepository(SqlConnection connection)
+        {
+            _connection = connection;
+        }
+
         public async Task<Room?> GetRoomAsync(Guid roomId, DateTime dateStart, DateTime dateEnd)
         {
-            await using var connection = new SqlConnection();
-
-            var room = await connection.QueryFirstOrDefaultAsync<Room?>(
+            var room = await _connection.QueryFirstOrDefaultAsync<Room?>(
                 "SELECT * FROM [Book] WHERE [Room]=@room AND [Date] BETWEEN @dateStart AND @dateEnd",
                 new
                 {

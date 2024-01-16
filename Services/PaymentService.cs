@@ -1,6 +1,5 @@
 ﻿using DependencyRoomBooking.Models;
 using DependencyRoomBooking.Services.Contracts;
-using Microsoft.AspNetCore.Mvc;
 using RestSharp;
 
 namespace DependencyRoomBooking.Services
@@ -17,8 +16,9 @@ namespace DependencyRoomBooking.Services
                     User = email,
                     CreditCard = creditCard
                 });
+            var paymentResponse = await client.PostAsync<PaymentResponse>(request);
 
-            return await client.PostAsync<PaymentResponse>(request, new CancellationToken());
+            return paymentResponse;
         }
     }
 }
