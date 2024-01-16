@@ -8,34 +8,31 @@ namespace DependencyRoomBooking.Controllers;
 [ApiController]
 public class BookController : ControllerBase
 {
-    private readonly ICustomerRepository _customerRepository;
-    private readonly IRoomRepository _roomRepository;
-    private readonly IBookRepository _bookRepository;
     private readonly IPaymentService _paymentService;
+    private readonly IBookService _bookService;
+    private readonly ICustomerService _customerService;
 
     public BookController(
-        ICustomerRepository customerRepository,
-        IRoomRepository roomRepository,
-        IBookRepository bookRepository, 
-        IPaymentService paymentService
+        ICustomerService customerService,
+        IPaymentService paymentService,
+        IBookService bookService
         )
     {
-        _customerRepository = customerRepository;
-        _roomRepository = roomRepository;
-        _bookRepository = bookRepository;
+        _customerService = customerService;
         _paymentService = paymentService;
+        _bookService = bookService;
     }
 
     [Route("v1/book")]
     [HttpPost]
     public async Task<IActionResult> Book(BookRoomCommand command)
     {
-        var customer = await _customerRepository.GetCustomerAsync(command.Email);
+        var customer = await _customerService.GetCustomerAsync(command.Email);
         if (customer == null)
             return NotFound();
 
-        var room = await _roomRepository.GetRoomAsync(command.RoomId, command.Day, command.Day.AddDays(5));
-        if (room is not null)
+        var room = await _bookService.CheckRoomAvailable(command.RoomId, command.Day, command.Day.AddDays(5));
+        if (room)
             return BadRequest();
 
         var response = await _paymentService.Pay(command.Email, command.CreditCard);
@@ -44,13 +41,15 @@ public class BookController : ControllerBase
         if (response?.Status != "paid")
             return BadRequest();
 
-        var book = await _bookRepository.CreateBookAsync(
+        var book = await _bookService.CreateNewBook(
             command.Email,
             command.RoomId,
-            command.Day,
-            command.Day.AddDays(5)
+            command.Day
         );
 
-        return Ok(book?.RoomId);
+        if (book is null)
+            return BadRequest();
+
+        return Ok(book);
     }
 }
