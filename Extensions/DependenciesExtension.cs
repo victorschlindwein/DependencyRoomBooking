@@ -18,7 +18,7 @@ namespace DependencyRoomBooking.Extensions
 
         public static void AddRepositories(this IServiceCollection services)
         {
-            services.AddTransient<IRoomRepository, RoomRepository>();
+            services.AddTransient<ICustomerRepository, CustomerRepository>();
             services.AddTransient<IBookRepository, BookRepository>();
         }
 

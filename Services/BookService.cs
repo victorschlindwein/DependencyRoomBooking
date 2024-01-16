@@ -13,13 +13,14 @@ namespace DependencyRoomBooking.Services
             _bookRepository = bookRepository;
         }
 
+
         public async Task<bool> CheckRoomAvailable(Guid roomId, DateTime dateStart, DateTime dateEnd)
         {
-            var book = await _bookRepository.GetBookByRoomIdAndPeriodStartEnd(roomId, dateStart, dateEnd);
+            var book = await _bookRepository.CheckRoomAvailable(roomId, dateStart, dateEnd);
 
             if (book == null)
                 return false;
-
+                
             return true;
         }
 
@@ -27,14 +28,13 @@ namespace DependencyRoomBooking.Services
         {
             var book = new Book(email, roomId, day);
 
-            var createBook = await _bookRepository.CreateBookAsync(book);
+            var saved = await _bookRepository.CreateBookAsync(book);
 
-            if (!createBook.HasValue)
+            if (saved.Equals(false))
                 return null;
 
-            var newBook = await _bookRepository.GetBookByRoomIdAndPeriodStartEnd(roomId, day.Date, day.Date.AddDays(1).AddTicks(-1));
-            return newBook?.RoomId;
-
+            var bookedRoom = await _bookRepository.CheckRoomAvailable(roomId, day.Date, day.Date.AddDays(1).AddTicks(-1));
+            return bookedRoom?.RoomId;
         }
     }
 }
